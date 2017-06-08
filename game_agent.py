@@ -35,8 +35,15 @@ def custom_score(game, player):
         The heuristic value of the current game state to the specified player.
     """
     # TODO: finish this function!
-    raise NotImplementedError
+    #raise NotImplementedError
+    if game.is_loser(player):
+        return float("-inf")
 
+    if game.is_winner(player):
+        return float("inf")
+
+    return float(len(game.get_legal_moves(player)))
+    
 
 def custom_score_2(game, player):
     """Calculate the heuristic value of a game state from the point of view
@@ -213,7 +220,56 @@ class MinimaxPlayer(IsolationPlayer):
             raise SearchTimeout()
 
         # TODO: finish this function!
-        raise NotImplementedError
+        
+        best_move = (-1, -1)
+        best_score = float("-inf")
+        print('test')
+        if len(game.get_legal_moves()) == 0:
+            return best_move
+        
+        for move in game.get_legal_moves():
+            score = self.min_value(game.forecast_move(move), depth - 1)
+            if score > best_score:
+                best_score = score
+                best_move = move
+            
+            
+            return best_move
+        
+
+    def max_value(self, game, depth):
+        if self.time_left() < self.TIMER_THRESHOLD:
+            raise SearchTimeout()
+            
+        if len(game.get_legal_moves()) == 0 or depth == 0:
+            return self.score(game, game.active_player)
+
+        v = float("-inf")
+
+        for choice in game.get_legal_moves():
+            temp_score = self.min_value(game.forcast_move(choice), depth - 1)
+            if temp_score > v:
+                v = temp_score
+                #print(depth)
+
+        return v
+
+    def min_value(self, game, depth):
+        if self.time_left() < self.TIMER_THRESHOLD:
+            raise SearchTimeout()
+            
+        if len(game.get_legal_moves()) == 0 or depth == 0:
+            return self.score(game, game.inactive_player)
+
+        v = float("inf")
+
+        for choice in game.get_legal_moves():
+            temp_score = self.max_value(game.forcast_move(choice), depth - 1) 
+            if temp_score < v:
+                v = temp_score
+                #print(depth)
+
+        return v        
 
 
 class AlphaBetaPlayer(IsolationPlayer):
