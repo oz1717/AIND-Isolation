@@ -247,7 +247,7 @@ class MinimaxPlayer(IsolationPlayer):
         v = float("-inf")
 
         for choice in game.get_legal_moves():
-            temp_score = self.min_value(game.forcast_move(choice), depth - 1)
+            temp_score = self.min_value(game.forecast_move(choice), depth - 1)
             if temp_score > v:
                 v = temp_score
                 #print(depth)
@@ -264,7 +264,7 @@ class MinimaxPlayer(IsolationPlayer):
         v = float("inf")
 
         for choice in game.get_legal_moves():
-            temp_score = self.max_value(game.forcast_move(choice), depth - 1) 
+            temp_score = self.max_value(game.forecast_move(choice), depth - 1) 
             if temp_score < v:
                 v = temp_score
                 #print(depth)
